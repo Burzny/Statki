@@ -7,7 +7,6 @@ collumn_names = {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8,
 i = 0
 u = 12
 v = 12
-# Naprawić wypierdalanie się programu gdy plansza ma wymiary 11 x 11
 user_life = 50
 size = 0
 shots = []
@@ -38,24 +37,17 @@ print('2 statki - 3 pola')
 print('2 statki - 2 pola')
 print('Masz ', user_life, ' żyć')
 
-# Czyszczenie okna
+# window clear
 def clearConsole():
     command = 'clear'
-    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+    if os.name in ('nt', 'dos'):
         command = 'cls'
     os.system(command)
 
 
-# FINKCJA ROZMIESZCZAJĄCA STATKI NA MAPIE
+# ship placement function
 def add_ship(size, ship_number):
-
-
     direction = random.randint(0, 1)
-
-    # FORSOWANIE KIERUNKU
-    # direction = 1
-
-
     if direction == 0:
         row = random.randint(1, 7)
         col = random.randint(1, 10)
@@ -63,24 +55,18 @@ def add_ship(size, ship_number):
         row = random.randint(1, 10)
         col = random.randint(1, 7)
 
-    # PIONOWO
+    # vertical placement
     if direction == 0:
-        # print('0 - pionowo')
-        # print('row = ' + str(row))
-        # print('col = ' + str(col))
-
-        #     # SPRAWDZANIE KOLIZJI
+        # collision check
         i = 0
         collision = 0
         while i < size + 2:
 
             if map[row + i - 1][col] == 'X':
-                # print('kolizja1')
                 collision = 1
                 return 1
                 break
             if map[row + i - 1][col] == 'o':
-                # print('kolizja2')
                 collision = 1
                 return 1
                 break
@@ -88,25 +74,21 @@ def add_ship(size, ship_number):
 
         if collision == 0:
             i = 0
-            # pudła przed statkiem
             if row > 1:
                 map[row - 1][col] = 'o'
                 if col < 10:
                     map[row - 1][col + 1] = 'o'
                 if col > 1:
                     map[row - 1][col - 1] = 'o'
-            # statek plus pudla obok
             while i < size:
                 map[row + i][col] = 'X'
                 if col < 10:
                     map[row + i][col + 1] = 'o'
                 if col > 1:
                     map[row + i][col - 1] = 'o'
-                # Tutaj zapisywanie pozycji statku
                 list_of_ships[ship_number].append([row + i, col])
                 i += 1
 
-            # pudła za statkiem
             if row + i < 11:
                 map[row + i][col] = 'o'
                 if col < 10:
@@ -115,24 +97,18 @@ def add_ship(size, ship_number):
                     map[row + i][col - 1] = 'o'
 
 
-    # POZIOMO
+    # vertical placement
     else:
-        # print('1 - poziomo')
-        # print('row = ' + str(row))
-        # print('col = ' + str(col))
-
-        #     # SPRAWDZANIE KOLIZJI
+        # collision check
         i = 0
         collision = 0
         while i < size + 2:
 
             if map[row][col + i - 1] == 'X':
-                # print('kolizja1')
                 collision = 1
                 return 1
                 break
             if map[row][col + i - 1] == 'o':
-                # print('kolizja2')
                 collision = 1
                 return 1
                 break
@@ -140,7 +116,6 @@ def add_ship(size, ship_number):
 
         if collision == 0:
             i = 0
-            # pudła przed statkiem
             if col > 1:
                 map[row][col - 1] = 'o'
                 if row < 10:
@@ -148,18 +123,15 @@ def add_ship(size, ship_number):
                 if row > 1:
                     map[row - 1][col - 1] = 'o'
 
-            # statek plus pudla obok
             while i < size:
                 map[row][col + i] = 'X'
                 if row < 10:
                     map[row + 1][col + i] = 'o'
                 if row > 1:
                     map[row - 1][col + i] = 'o'
-                # Tutaj zapisywanie pozycji statku
                 list_of_ships[ship_number].append([row, col + i])
                 i += 1
 
-            # pudła za statkiem
             if col + i < 11:
                 map[row][col + i] = 'o'
                 if row < 10:
@@ -167,21 +139,10 @@ def add_ship(size, ship_number):
                 if row > 1:
                     map[row - 1][col + i] = 'o'
 
-
     ship_number += 1
-    # print(list_of_ships)
     return 0
 
-
-
-# map[1][1] = 'TEST'
-#
-# while i < 11:
-#     print(tab[i])
-#     i += 1
-
-
-# FUNKCJA SPRAWDZAJĄCA ZATOPIENIE
+# sink check
 def ship_sunk(ship_number):
 
     row_check = 0
@@ -190,27 +151,18 @@ def ship_sunk(ship_number):
     ship_len = len(list_of_ships[ship_number])
     i = 0
     ship_positions = list_of_ships[ship_number]
-    # print(ship_positions)
     sunk = 0
 
     while i < ship_len:
         row_check = ship_positions[i][0]
         col_check = ship_positions[i][1]
         x = 0
-        # print(row_check)
-        # print(col_check)
-        # print('.')
-
         pos_value = str(user_map[row_check][col_check])
-        # print(pos_value)
         if pos_value != 'X':
             sunk = 1
         i += 1
-    # print('koniec funkcji')
     if sunk == 0:
         message = 'ZATOPIONY!'
-        # TU WPISAĆ FUNKCJĘ KTÓRA OPISZE STATEK DOOKOŁA PUDŁAMI
-
         n = 0
         while n < ship_len:
             user_map[list_of_ships[ship_number][n][0] - 1][list_of_ships[ship_number][n][1] - 1] = 'o'
@@ -227,26 +179,14 @@ def ship_sunk(ship_number):
         n = 0
         while n < ship_len:
             user_map[list_of_ships[ship_number][n][0]][list_of_ships[ship_number][n][1]] = 'X'
-
             n += 1
 
-
-
-
-        # dopisywanie do mapy
         x = 1
         while x < 11:
             user_map[x][0] = x
             x += 1
         user_map[0] = ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
-        # TU KONIEC FUNKCJI
-
         list_of_ships[ship_number] = [[0, 0] for x in range(ship_len)]
-        # print(list_of_ships[ship_number])
-
-
-
-
 
 collision = 1
 while add_ship(4, 0) == 1:
@@ -260,14 +200,7 @@ while add_ship(2, 3) == 1:
 while add_ship(2, 4) == 1:
     collision = 1
 
-
-#  ZMIENIC WYSWIETLANIE PLANSZY!!!!!!!!!!!!!!!!!!!!!!
-# i = 0
-# while i < 11:
-#     print(map[i])
-#     i += 1
-
-
+# game loop
 while True:
     clearConsole()
 
@@ -290,7 +223,6 @@ while True:
 
     shot = input('Wprowadź pole strzału (najpierw kolumna): ')
     shotlist = list(shot)
-    # print(shotlist[0])
     try:
         shot_col = shotlist[0]
         shot_row = shotlist[1]
@@ -300,7 +232,7 @@ while True:
         message = 'Podałeś błędne położenie'
         pass
 
-# ZABEZPIECZENIA WPISANIA
+# input requirements
     isdigit = 0
     if str.isdigit(shot_row):
         isdigit = 1
@@ -360,11 +292,7 @@ while True:
                 input('Wciśnij dowolny klawisz')
                 break
 
-
-            # print(list_of_ships)
-            # print('pierwsze pole to: ' + str(list_of_ships[0][0]))
-
-#   Sprawdzanie zatopienia statku
+#   check for ship sunk
             ship_sunk(0)
             ship_sunk(1)
             ship_sunk(2)
