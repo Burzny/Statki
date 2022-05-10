@@ -1,5 +1,6 @@
-Cześć!
-Repozytorium zawiera gotowy projekt gry w statki całkowicie zaprojektowany przeze mnie
-Jeśli tu trafiłeś to czuj się wolny aby poświęcić chwilę na zabawę z aplikacją którą stworzyłem
+
+Hey!
+This is my battleship game.
+Feel free to download and play by yourself.
 
 GL HF!
